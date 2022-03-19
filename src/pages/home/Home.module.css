@@ -1,0 +1,5 @@
+/* CSS MODULES
+    - have .module.css extension
+    - Automatically re-map class names so they are ALWAYS only local refs
+    - DO NOT STYLE ELEMENTS (eg. h1, p, etc..) IN MODULES! These act global, as normal
+*/
