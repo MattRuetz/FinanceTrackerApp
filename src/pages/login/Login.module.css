@@ -3,3 +3,23 @@
     - Automatically re-map class names so they are ALWAYS only local refs
     - DO NOT STYLE ELEMENTS (eg. h1, p, etc..) IN MODULES! These act global, as normal
 */
+
+.login-form {
+    max-width: 360px;
+    margin: 60px auto;
+    padding: 20px;
+}
+.login-form label {
+    display: block;
+    margin: 30px auto;
+}
+.login-form span {
+    display: block;
+    margin-bottom: 6px;
+}
+.login-form input {
+    padding: 8px 6px;
+    font-size: 1em;
+    color: #777;
+    width: 100%;
+}
