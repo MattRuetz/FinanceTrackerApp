@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { db, projectAuth } from '../firebase/config';
 import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useAuthContext } from './useAuthContext';
 
 export const useSignup = () => {
     const [error, setError] = useState(null);
 
     const [isPending, setIsPending] = useState(false);
 
-    const signup = async (username, email, password) => {
+    const { dispatch } = useAuthContext();
+
+    const signup = async (displayName, email, password) => {
         setError(null);
         setIsPending(true);
 
         try {
             const auth = projectAuth;
-            console.log(email, password, username);
+            // console.log(email, password, displayName);
             const res = await createUserWithEmailAndPassword(
                 auth,
                 email,
@@ -25,13 +28,17 @@ export const useSignup = () => {
                 throw new Error('Could not complete signup.');
             }
 
-            // Add a new document in collection "cities"
+            // Add displayName prop to AUTH (not firestore)
+            await updateProfile(res.user, { displayName });
+
+            // Add a new document in collection "users" in firestore
             await setDoc(doc(db, 'users', res.user.uid), {
-                username,
+                displayName,
                 email,
             });
 
-            console.log(res.user, username);
+            // Dispatch LOGIN to log in new user
+            dispatch({ type: 'LOGIN', payload: res.user });
 
             setIsPending(false);
             setError(null);
