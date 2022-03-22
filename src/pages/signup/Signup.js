@@ -6,7 +6,7 @@ import { useSignup } from '../../hooks/useSignup';
 import styles from './Signup.module.css';
 
 function Signup() {
-    const [username, setUsername] = useState('');
+    const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,7 +15,7 @@ function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Store user authentication and login user if signed up
-        signup(username, email, password);
+        signup(displayName, email, password);
     };
 
     return (
@@ -26,8 +26,8 @@ function Signup() {
                 <span>user name:</span>
                 <input
                     type="text"
-                    onChange={(e) => setUsername(e.target.value)}
-                    value={username}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    value={displayName}
                 />
             </label>
             <label>
