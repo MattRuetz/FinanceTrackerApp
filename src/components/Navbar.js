@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useLogout } from '../hooks/useLogout';
 import styles from './Navbar.module.css';
 
 function Navbar() {
+    const { logout } = useLogout();
+
     return (
         // classes ref'd from CSS module... MUST ADD CLASSES LIKE THIS
         <nav className={styles.navbar}>
@@ -16,6 +19,11 @@ function Navbar() {
                     <Link to="/signup">
                         <strong>Signup!</strong>
                     </Link>
+                </li>
+                <li>
+                    <button className="btn" onClick={logout}>
+                        Logout
+                    </button>
                 </li>
             </ul>
         </nav>

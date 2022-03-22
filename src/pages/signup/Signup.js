@@ -19,43 +19,46 @@ function Signup() {
     };
 
     return (
-        // If module classnames have cant be ref'd with styles.signup-form (because of -) do this
-        <form onSubmit={handleSubmit} className={styles['signup-form']}>
-            <h2>Signup</h2>
-            <label>
-                <span>user name:</span>
-                <input
-                    type="text"
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    value={displayName}
-                />
-            </label>
-            <label>
-                <span>email:</span>
-                <input
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                />
-            </label>
-            <label>
-                <span>password:</span>
-                <input
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                />
-            </label>
-
+        <>
             {isPending ? (
                 <Spinner />
             ) : (
-                <button type="submit" className="btn">
-                    Signup
-                </button>
+                // If module classnames have cant be ref'd with styles.signup-form (because of -) do this
+                <form onSubmit={handleSubmit} className={styles['signup-form']}>
+                    <h2>Signup</h2>
+                    <label>
+                        <span>user name:</span>
+                        <input
+                            type="text"
+                            onChange={(e) => setDisplayName(e.target.value)}
+                            value={displayName}
+                        />
+                    </label>
+                    <label>
+                        <span>email:</span>
+                        <input
+                            type="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                        />
+                    </label>
+                    <label>
+                        <span>password:</span>
+                        <input
+                            type="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                        />
+                    </label>
+
+                    <button type="submit" className="btn">
+                        Signup
+                    </button>
+
+                    {error && <p>{error}</p>}
+                </form>
             )}
-            {error && <p>{error}</p>}
-        </form>
+        </>
     );
 }
 
