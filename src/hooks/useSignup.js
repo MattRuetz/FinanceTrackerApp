@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db, projectAuth } from '../firebase/config';
 import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useAuthContext } from './useAuthContext';
 
 export const useSignup = () => {
+    const [unmounted, setUnmounted] = useState(false);
     const [error, setError] = useState(null);
-
     const [isPending, setIsPending] = useState(false);
 
     const { dispatch } = useAuthContext();
@@ -40,14 +40,23 @@ export const useSignup = () => {
             // Dispatch LOGIN to log in new user
             dispatch({ type: 'LOGIN', payload: res.user });
 
-            setIsPending(false);
-            setError(null);
+            if (!unmounted) {
+                setIsPending(false);
+                setError(null);
+            }
         } catch (err) {
             console.log(err.message);
             setError(err.message);
             setIsPending(false);
         }
     };
+
+    useEffect(() => {
+        return () => {
+            // Return a cleanup function incase unmounted
+            setUnmounted(true);
+        };
+    }, []);
 
     return { signup, isPending, error };
 };
