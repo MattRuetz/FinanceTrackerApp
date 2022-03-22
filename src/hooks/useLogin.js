@@ -1,45 +1,29 @@
 import { useState, useEffect } from 'react';
-import { db, projectAuth } from '../firebase/config';
-import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+import { projectAuth } from '../firebase/config';
 import { useAuthContext } from './useAuthContext';
 
-export const useSignup = () => {
+export const useLogin = () => {
     const [unmounted, setUnmounted] = useState(false);
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(false);
-
     const { dispatch } = useAuthContext();
 
-    const signup = async (displayName, email, password) => {
+    const login = async (email, password) => {
         setError(null);
         setIsPending(true);
 
         try {
-            const auth = projectAuth;
-            // console.log(email, password, displayName);
-            const res = await createUserWithEmailAndPassword(
-                auth,
+            const res = await signInWithEmailAndPassword(
+                projectAuth,
                 email,
                 password
             );
 
-            if (!res) {
-                throw new Error('Could not complete signup.');
-            }
-
-            // Add displayName prop to AUTH (not firestore)
-            await updateProfile(res.user, { displayName });
-
-            // Add a new document in collection "users" in firestore
-            await setDoc(doc(db, 'users', res.user.uid), {
-                displayName,
-                email,
-            });
-
-            // Dispatch LOGIN to log in new user
             dispatch({ type: 'LOGIN', payload: res.user });
 
+            // update state
             if (!unmounted) {
                 setIsPending(false);
                 setError(null);
@@ -60,5 +44,5 @@ export const useSignup = () => {
         };
     }, []);
 
-    return { signup, isPending, error };
+    return { login, error, isPending };
 };
