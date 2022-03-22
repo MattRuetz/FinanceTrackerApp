@@ -17,6 +17,7 @@ function Navbar() {
                 {/* display relevant buttons for logged in OR not */}
                 {user ? (
                     <li>
+                        <Link to="/">Hello, {user.displayName}</Link>
                         <button className="btn" onClick={logout}>
                             Logout
                         </button>
