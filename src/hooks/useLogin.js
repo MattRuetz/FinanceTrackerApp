@@ -3,12 +3,16 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { projectAuth } from '../firebase/config';
 import { useAuthContext } from './useAuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
     const [unmounted, setUnmounted] = useState(false);
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const { dispatch } = useAuthContext();
+
+    // Can call hooks from custom hooks! Neat
+    const nav = useNavigate(); // logged in -> send home
 
     const login = async (email, password) => {
         setError(null);
@@ -28,6 +32,8 @@ export const useLogin = () => {
                 setIsPending(false);
                 setError(null);
             }
+            // logged in -> go back home
+            nav('/');
         } catch (err) {
             if (!unmounted) {
                 console.log(err.message);
