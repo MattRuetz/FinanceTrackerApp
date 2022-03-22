@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Spinner from '../../components/Spinner';
+import { useSignup } from '../../hooks/useSignup';
+
 // styles
 import styles from './Signup.module.css';
 
@@ -7,10 +10,12 @@ function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const { signup, isPending, error } = useSignup();
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Store user authentication and login user if signed up
-        console.log(username, email, password);
+        signup(username, email, password);
     };
 
     return (
@@ -41,9 +46,15 @@ function Signup() {
                     value={password}
                 />
             </label>
-            <button type="submit" className="btn">
-                Signup
-            </button>
+
+            {isPending ? (
+                <Spinner />
+            ) : (
+                <button type="submit" className="btn">
+                    Signup
+                </button>
+            )}
+            {error && <p>{error}</p>}
         </form>
     );
 }
