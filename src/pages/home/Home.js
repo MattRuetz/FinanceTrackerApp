@@ -10,11 +10,11 @@ import styles from './Home.module.css';
 function Home() {
     const { user } = useAuthContext();
     // get documents stored with current user's id
-    const { documents, error } = useCollection('transactions', [
-        'uid',
-        '==',
-        user.uid,
-    ]);
+    const { documents, error } = useCollection(
+        'transactions',
+        ['uid', '==', user.uid],
+        ['createdAt', 'desc']
+    );
 
     return (
         <div className={styles.container}>

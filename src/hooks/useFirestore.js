@@ -1,7 +1,7 @@
 // Hook to ADD OR REMOVE DOCUMENTS FROM FBASE COLLECTIONS
 import { db } from '../firebase/config';
 import { useReducer, useEffect, useState } from 'react';
-import { collection, Timestamp, addDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 
 let initState = {
     document: null,
@@ -47,8 +47,6 @@ export const useFirestore = (collectionName) => {
     // collection reference
     const ref = collection(db, collectionName);
 
-    console.log('ref: ', ref);
-
     // only dispatch if component is still mounted
     const dispatchIfMounted = (action) => {
         if (!unmounted) {
@@ -61,11 +59,11 @@ export const useFirestore = (collectionName) => {
         dispatch({ type: 'IS_PENDING' });
 
         try {
-            const createdAt = Timestamp.fromDate(new Date());
+            doc.createdAt = new Date();
 
-            const addedDocument = await addDoc(ref, doc, { createdAt });
-
-            console.log(addedDocument);
+            const addedDocument = await addDoc(ref, {
+                ...doc,
+            });
 
             dispatchIfMounted({
                 type: 'ADDED_DOCUMENT',
