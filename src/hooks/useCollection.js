@@ -1,8 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
-import { collection, onSnapshot, where, query } from 'firebase/firestore';
+import {
+    collection,
+    onSnapshot,
+    where,
+    query,
+    orderBy,
+} from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-export const useCollection = (collectionName, _query) => {
+export const useCollection = (collectionName, _query, _orderBy) => {
     const [documents, setDocuments] = useState(null);
     const [error, setError] = useState(null);
 
@@ -10,11 +16,16 @@ export const useCollection = (collectionName, _query) => {
     // (ref's don't get relocated in memory every render, so wont trigger the useEffect)
     const queryRef = useRef(_query).current;
 
+    const orderByRef = useRef(_orderBy).current;
+
     useEffect(() => {
         let ref = collection(db, collectionName);
 
         if (queryRef) {
             ref = query(ref, where(...queryRef));
+        }
+        if (orderByRef) {
+            ref = query(ref, orderBy(...orderByRef));
         }
 
         // onSnapshot is a REAL-TIME LISTENER, which returns
