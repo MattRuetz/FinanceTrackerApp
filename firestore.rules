@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /transactions/{document=**} {
     //   allow read, create, delete, update;
-        allow create: if request.auth !== null;
+        allow create: if request.auth != null;
         // user can only access their own created docs (transactions, etc)
         allow read, delete, update: if request.auth.uid == resource.data.uid;
     }

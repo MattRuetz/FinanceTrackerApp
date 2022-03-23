@@ -13,7 +13,7 @@ function Spinner() {
                 }}
             >
                 <h2 className="loading-text">
-                    <em>{msgs[Math.floor(Math.random() * 30)]}</em>
+                    <em>{msgs[Math.floor(Math.random() * msgs.length)]}</em>
                 </h2>
 
                 <img
