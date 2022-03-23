@@ -1,7 +1,7 @@
 // Hook to ADD OR REMOVE DOCUMENTS FROM FBASE COLLECTIONS
 import { db } from '../firebase/config';
 import { useReducer, useEffect, useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 let initState = {
     document: null,
@@ -25,6 +25,14 @@ const firestoreReducer = (state, action) => {
                 // Dont need ...state because setting every state
                 isPending: false,
                 document: action.payload,
+                success: true,
+                error: null,
+            };
+
+        case 'DELETED_DOCUMENT':
+            return {
+                isPending: false,
+                document: null,
                 success: true,
                 error: null,
             };
@@ -74,13 +82,31 @@ export const useFirestore = (collectionName) => {
             console.log(err);
             dispatchIfMounted({
                 type: 'ERROR',
-                payload: err.message,
+                payload: 'Unable to delete document',
             });
         }
     };
 
     // delete a doc
-    const deleteDocument = async (id) => {};
+    const deleteDocument = async (id) => {
+        dispatch({ type: 'IS_PENDING' });
+
+        try {
+            const deletedDocument = await deleteDoc(doc(ref, id));
+
+            dispatchIfMounted({
+                type: 'DELETED_DOCUMENT',
+                payload: deletedDocument,
+                error: null,
+            });
+        } catch (err) {
+            console.log(err);
+            dispatchIfMounted({
+                type: 'ERROR',
+                payload: 'unable to delete',
+            });
+        }
+    };
 
     useEffect(() => {
         return () => setUnmounted(true);
