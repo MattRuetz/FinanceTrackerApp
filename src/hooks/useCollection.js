@@ -50,7 +50,7 @@ export const useCollection = (collectionName, _query, _orderBy) => {
 
         // unsub when component unmounts
         return () => unsub();
-    }, [collectionName, queryRef]);
+    }, [collectionName, queryRef, orderByRef]);
 
     return { documents, error };
 };
