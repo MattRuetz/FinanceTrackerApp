@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db, projectAuth } from '../firebase/config';
 import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -10,6 +11,8 @@ export const useSignup = () => {
     const [isPending, setIsPending] = useState(false);
 
     const { dispatch } = useAuthContext();
+
+    const nav = useNavigate();
 
     const signup = async (displayName, email, password) => {
         setError(null);
@@ -44,6 +47,8 @@ export const useSignup = () => {
                 setIsPending(false);
                 setError(null);
             }
+
+            nav('/');
         } catch (err) {
             if (!unmounted) {
                 console.log(err.message);
